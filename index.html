@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PGR4 Leaderboards</title>
+  <meta name="description" content="Live leaderboards for Project Gotham Racing 4 (PGR4-Recomp).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-row">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">PGR4</span>
+        <div>
+          <h1>Leaderboards</h1>
+          <p class="sub">Project Gotham Racing 4 · PGR4-Recomp</p>
+        </div>
+      </div>
+      <div class="status" id="status"><span class="dot"></span><span id="status-text">Connecting…</span></div>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <aside class="side">
+      <label class="search">
+        <span class="sr">Find a board</span>
+        <input id="search" type="search" placeholder="Find a board (city, event, class…)" autocomplete="off">
+      </label>
+      <label class="toggle"><input type="checkbox" id="only-active" checked> Boards with times only</label>
+      <nav id="boards" class="boards" aria-label="Leaderboards"></nav>
+    </aside>
+
+    <section class="main">
+      <section class="panel" id="board-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow" id="board-group">Leaderboard</p>
+            <h2 id="board-title">Pick a board</h2>
+          </div>
+          <div class="meta" id="board-meta"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="board" id="board-table">
+            <thead></thead>
+            <tbody><tr><td class="empty">Choose a leaderboard on the left, or wait for the first times to come in.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pager" id="pager" hidden>
+          <button id="prev" type="button">Previous</button>
+          <span id="page-label"></span>
+          <button id="next" type="button">Next</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Live</p>
+            <h2>Latest results</h2>
+          </div>
+        </div>
+        <ol class="feed" id="feed"><li class="empty">Nothing yet.</li></ol>
+      </section>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Results come from PGR4-Recomp players and update every few seconds. Fan project, not affiliated with Bizarre Creations, Microsoft or Activision.</p>
+  </footer>
+
+  <script src="config.js?v=4"></script>
+  <script src="app.js?v=4"></script>
+</body>
+</html>
