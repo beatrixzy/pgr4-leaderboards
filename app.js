@@ -112,6 +112,9 @@
     const d = describe(viewId);
     const result = columnsFor(viewId).find((c) => c.name === "Result");
     if (d.kind === "time" && result && row.columns[result.id]) return fmtTime(row.columns[result.id][1]);
+    // Arcade and the like pack the medal into the rating's top half; the
+    // result column is the readable figure.
+    if (result && row.columns[result.id]) return fmtNumber(row.columns[result.id][1]);
     const score = columnsFor(viewId).find((c) => c.id === COL_RATING);
     return score ? `${fmtNumber(row.rating)} ${score.name === "RATING" || score.name === "Rating" ? "pts" : score.name.toLowerCase()}` : fmtNumber(row.rating);
   }
@@ -225,16 +228,18 @@
       (c) =>
         ![COL_RANK, COL_GAMERTAG, COL_RATING].includes(c.id) &&
         c.name !== "Nationality" &&
-        (!c.hidden || c.name === "Result" || d.career),
+        (!c.hidden || c.name === "Result" || c.name === "Medal" || d.career),
     );
     const scoreCol = columnsFor(id).find((c) => c.id === COL_RATING);
+    // The raw rating only reads as a score on boards without a result column.
+    const showScore = d.kind !== "time" && !cols.some((c) => c.name === "Result");
     const thead = $("board-table").tHead;
     thead.replaceChildren(
       el("tr", {},
         el("th", {}, "#"),
         el("th", {}, "Player"),
         ...cols.map((c) => el("th", { class: "num" }, d.kind === "time" && c.name === "Result" ? "Time" : c.name)),
-        d.kind === "time" ? "" : el("th", { class: "num" }, scoreCol ? (scoreCol.name.toUpperCase() === "RATING" ? "Score" : scoreCol.name) : "Score"),
+        !showScore ? "" : el("th", { class: "num" }, scoreCol ? (scoreCol.name.toUpperCase() === "RATING" ? "Score" : scoreCol.name) : "Score"),
         el("th", { class: "num" }, "Set")));
     const tbody = $("board-table").tBodies[0];
     tbody.replaceChildren();
@@ -251,7 +256,7 @@
           el("td", { class: "rank" }, row.rank),
           el("td", { class: "player" }, row.gamertag),
           ...cols.map((c) => el("td", { class: `num${d.kind === "time" && c.name === "Result" ? " mono" : ""}` }, cellValue(c, row.columns[c.id], d.kind))),
-          d.kind === "time" ? "" : el("td", { class: "num mono" }, fmtNumber(row.rating)),
+          !showScore ? "" : el("td", { class: "num mono" }, fmtNumber(row.rating)),
           el("td", { class: "num", title: new Date(row.updated).toLocaleString() }, ago(row.updated))));
     }
     lastRows = seen;
